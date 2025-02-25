@@ -79,4 +79,22 @@ class LoginController {
             return ['error' => $e->getMessage()];
         }
     }
+
+    public function obtenerListaUsuarios() {
+        try {
+            $usuarios = $this->model->obtenerListaUsuarios();
+            return $usuarios;   
+        } catch (Exception $e) {
+            return ['error' => $e->getMessage()];
+        }
+    }
+
+    public function obtenerListaClientes() {
+        try {
+            $clientes = $this->model->obtenerListaClientes();
+            return $clientes;
+        } catch (Exception $e) {
+            return ['error' => $e->getMessage()];
+        }
+    }   
 }

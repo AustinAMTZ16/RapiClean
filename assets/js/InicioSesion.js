@@ -42,7 +42,6 @@
             });
         }
     });
-
     /**
      * Función para realizar la petición de inicio de sesión
      * @param {Object} data - Datos del formulario de inicio de sesión

@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <div id="header"></div>
+    <script src="../../assets/js/SesionUser.js"></script>
+    <!-- En el head -->
+    <!-- jQuery debe estar antes de DataTables -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+    <!-- DataTables CSS -->
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css">
+
+    <!-- DataTables JS -->
+    <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+
+</head>
+
+<body>
+    <!-- Placeholder para menú -->
+    <div id="menul"></div>
+    <!-- Contenido único de la página -->
+    <div class="dashboard-container">
+        <div class="card" style="width: 90%; margin: 20px auto;">
+            <h2 style="text-align: center; margin-bottom: 20px;">Lista de Usuarios</h2>
+            <div class="table-responsive">
+                <table id="usuariosTable" class="display nowrap">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Nombre</th>
+                            <th>Email</th>
+                            <th>Rol</th>
+                            <th>Estado</th>
+                            <th>Creación</th>
+                            <th>Último Acceso</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- Modal -->
+    <div class="modal fade" id="claveModal" tabindex="-1" role="dialog" aria-labelledby="claveModalLabel" hidden>
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="claveModalLabel">Ingrese la nueva clave</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <input type="password" id="nuevaClave" class="form-control" placeholder="Clave nueva" required>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                    <button type="button" class="btn btn-primary" id="confirmarClave">Confirmar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    
+    <!-- Placeholder para footer -->
+    <div id="footer"></div>
+    <!-- Cargar lógica -->
+    <script src="../../assets/js/LogicaComponents.js"></script>
+    <script src="../../assets/js/LogicaMenu.js"></script>
+    <script src="../../assets/js/Usuarios.js"></script>
+</body>
+
+</html>

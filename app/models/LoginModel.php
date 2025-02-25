@@ -102,16 +102,14 @@ class LoginModel {
         // Limpia y filtra los datos antes de insertarlos en la base de datos
         $Nombre = isset($data['Nombre']) && $data['Nombre'] !== '' ? $data['Nombre'] : null;
         $Email = isset($data['Email']) && $data['Email'] !== '' ? $data['Email'] : null;
-        $Password = isset($data['Password']) && $data['Password'] !== '' ? $data['Password'] : null;
-        $RolID = isset($data['RolID']) && $data['RolID'] !== '' ? $data['RolID'] : null;
-        $Estado = isset($data['Estado']) && $data['Estado'] !== '' ? $data['Estado'] : null;    
+        $Password = isset($data['Password']) && $data['Password'] !== '' ? $data['Password'] : null;  
         // Validar que los datos sean correctos
         if (!isset($data['Nombre']) || !isset($data['Email']) || !isset($data['Password'])) {
             throw new Exception("Faltan datos de registro de usuario.");
         }
         // Consulta SQL para registrar el usuario
-        $sql = "INSERT INTO Usuarios (Nombre, Email, Password, RolID, Estado, FechaCreacion) 
-                VALUES (:Nombre, :Email, :Password, 8, 'Activo', NOW())";
+        $sql = "INSERT INTO Usuarios (Nombre, Email, Password, RolID, Estado) 
+                VALUES (:Nombre, :Email, :Password, 11, 'Activo')";
         $stmt = $this->conn->prepare($sql);
         $stmt->bindParam(':Nombre', $Nombre);
         $stmt->bindParam(':Email', $Email);
@@ -130,15 +128,13 @@ class LoginModel {
         $Nombre = isset($data['Nombre']) && $data['Nombre'] !== '' ? $data['Nombre'] : null;
         $Email = isset($data['Email']) && $data['Email'] !== '' ? $data['Email'] : null;
         $Password = isset($data['Password']) && $data['Password'] !== '' ? $data['Password'] : null;
-        $PuntosRecompensa = isset($data['PuntosRecompensa']) && $data['PuntosRecompensa'] !== '' ? $data['PuntosRecompensa'] : null;
-        $Estado = isset($data['Estado']) && $data['Estado'] !== '' ? $data['Estado'] : null;
         // Validar que los datos sean correctos
         if (!isset($data['Nombre']) || !isset($data['Email']) || !isset($data['Password'])) {
             throw new Exception("Faltan datos de registro de cliente.");
         }   
         // Consulta SQL para registrar el cliente
-        $sql = "INSERT INTO Clientes (Nombre, Email, Password, PuntosRecompensa, Estado, FechaCreacion) 
-                VALUES (:Nombre, :Email, :Password, 0, 'Activo', NOW())";
+        $sql = "INSERT INTO Clientes (Nombre, Email, Password, RolID, Estado) 
+                VALUES (:Nombre, :Email, :Password, 0, 'Activo')";
         $stmt = $this->conn->prepare($sql);
         $stmt->bindParam(':Nombre', $Nombre);
         $stmt->bindParam(':Email', $Email);
@@ -177,14 +173,13 @@ class LoginModel {
         $Estado = isset($data['Estado']) && $data['Estado'] !== '' ? $data['Estado'] : $usuario['Estado'];
 
         // Consulta SQL para actualizar el usuario
-        $sql = "UPDATE Usuarios SET Nombre = :Nombre, Email = :Email, Password = :Password, RolID = :RolID, Estado = :Estado WHERE UsuarioID = :UsuarioID";
+        $sql = "UPDATE Usuarios SET Nombre = :Nombre, Email = :Email, Password = :Password, RolID = 11, Estado = :Estado WHERE UsuarioID = :UsuarioID";
         $stmt = $this->conn->prepare($sql);
         $stmt->bindParam(':UsuarioID', $data['UsuarioID']);
         $stmt->bindParam(':Nombre', $Nombre);
         $stmt->bindParam(':Email', $Email);
-        $stmt->bindParam(':Password', $Password);
-        $stmt->bindParam(':RolID', $RolID);
         $stmt->bindParam(':Estado', $Estado);
+        $stmt->bindParam(':Password', $Password);
 
         if ($stmt->execute()) {
             return true;
@@ -328,5 +323,22 @@ class LoginModel {
             return []; // O podrías lanzar una excepción dependiendo del flujo que deseas
         }
     }
-    
+
+    //Obtener Lista de Usuarios
+    public function obtenerListaUsuarios() {
+        $sql = "SELECT u.UsuarioID,u.Nombre,u.Email,u.RolID,r.NombreRol,r.Descripcion,u.Estado,u.FechaCreacion,u.UltimoAcceso FROM Usuarios u
+                INNER JOIN Roles r ON u.RolID = r.RolID 
+                ORDER BY UsuarioID ASC";
+        $stmt = $this->conn->prepare($sql);
+        $stmt->execute();
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }   
+
+    //Obtener Lista de Clientes
+    public function obtenerListaClientes() {
+        $sql = "SELECT ClienteID,Nombre,Email,PuntosRecompensa,Estado,FechaCreacion,UltimoAcceso FROM Clientes ORDER BY ClienteID ASC";
+        $stmt = $this->conn->prepare($sql);
+        $stmt->execute();
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
 }   

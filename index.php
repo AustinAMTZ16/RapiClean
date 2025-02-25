@@ -457,8 +457,28 @@
                     echo json_encode(array('message' => 'Semaforo de servicios no listados.', 'data' => $respuesta), JSON_UNESCAPED_UNICODE);
                 }
                 exit;   
-            
-                
+            case 'obtenerListaUsuarios':
+                global $controllerLogin;
+                $respuesta = $controllerLogin->obtenerListaUsuarios();
+                if (!empty($respuesta) && (!isset($respuesta['error']) || empty($respuesta['error']))) {
+                    http_response_code(200);
+                    echo json_encode(array('message' => 'Usuarios listados.', 'data' => $respuesta), JSON_UNESCAPED_UNICODE);
+                } else {
+                    http_response_code(404);
+                    echo json_encode(array('message' => 'Usuarios no listados.', 'data' => $respuesta), JSON_UNESCAPED_UNICODE);
+                }
+                exit;
+            case 'obtenerListaClientes':
+                global $controllerLogin;    
+                $respuesta = $controllerLogin->obtenerListaClientes();  
+                if (!empty($respuesta) && (!isset($respuesta['error']) || empty($respuesta['error']))) {
+                    http_response_code(200);
+                    echo json_encode(array('message' => 'Clientes listados.', 'data' => $respuesta), JSON_UNESCAPED_UNICODE);
+                } else {
+                    http_response_code(404);
+                    echo json_encode(array('message' => 'Clientes no listados.', 'data' => $respuesta), JSON_UNESCAPED_UNICODE);    
+                }
+                exit;
             default:
                 http_response_code(404);
                 echo json_encode(['Message' => 'Acción GET desconocida.'], JSON_UNESCAPED_UNICODE);

@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <div id="header"></div>
+    <script src="../../assets/js/SesionUser.js"></script>
+    <!-- jQuery debe estar antes de DataTables -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+    <!-- DataTables CSS -->
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css">
+
+    <!-- DataTables JS -->
+    <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+</head>
+
+<body>
+    <!-- Placeholder para menú -->
+    <div id="menul"></div>
+    <!-- Contenido único de la página -->
+    <div class="dashboard-container">
+        <h1>Detalles del Usuario</h1>
+        <div class="user-details-card">
+            <div class="user-info" id="UsuarioDiv">
+                <div class="info-item">
+                    <label for="UsuarioID">Identificador del usuario:</label>
+                    <input type="text" id="UsuarioID" readonly>
+                </div>
+                <div class="info-item">
+                    <label for="Nombre">Nombre:</label>
+                    <input type="text" id="Nombre"  readonly>
+                </div>
+                <div class="info-item">
+                    <label for="Email">Email:</label>
+                    <input type="text" id="Email"  readonly>
+                </div>
+                <div class="info-item">
+                    <label for="Rol">Nombre Rol:</label>
+                    <input type="text" id="RolName"  readonly>
+                </div>
+                <div class="info-item">
+                    <label for="Estado">Estado:</label>
+                    <input type="text" id="Estado"  readonly>
+                </div>
+                <div class="info-item">
+                    <label for="FechaCreacion">Fecha de Creación:</label>
+                    <input type="text" id="FechaCreacion"  readonly>
+                </div>
+                <div class="info-item">
+                    <label for="UltimoAcceso">Último Acceso:</label>
+                    <input type="text" id="UltimoAcceso" readonly>
+                </div>
+                <div class="info-item">
+                    <label for="Password">Clave de la cuenta:</label>
+                    <input type="password" id="Password" readonly>
+                </div>
+            </div>
+            <div class="user-actions">
+                <button class="btn btn-primary" onclick="window.location.href='updateUser.html?id=' + document.getElementById('UsuarioID').value;">Editar</button>
+                <button class="btn delete" onclick="eliminarUsuario(document.getElementById('UsuarioID').value)"><i class="fas fa-trash-alt"></i> Eliminar</button>
+            </div>
+        </div>
+    </div>
+    <!-- Placeholder para footer -->
+    <div id="footer"></div>
+    <!-- Cargar lógica -->
+    <script src="../../assets/js/LogicaComponents.js"></script>
+    <script src="../../assets/js/LogicaMenu.js"></script>
+    <script src="../../assets/js/Usuarios.js"></script>
+</body>
+
+</html>

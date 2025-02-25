@@ -787,7 +787,7 @@ footer a{
     display: flex;
     align-items: center;
     justify-content: center;
-    background: url('../images/logoprincipal.png') no-repeat center center fixed;
+    /* background: url('../images/logoprincipal.png') no-repeat center center fixed; */
     padding: 2rem;
 }
 
@@ -841,6 +841,15 @@ footer a{
 }
 
 .login-form input {
+    width: 100%;
+    padding: 1rem;
+    border: 2px solid var(--seccionPrimaria);
+    border-radius: 8px;
+    font-size: 1rem;
+    transition: all 0.3s ease;
+    background: var(--text-blanco);
+}
+.login-form select {
     width: 100%;
     padding: 1rem;
     border: 2px solid var(--seccionPrimaria);
@@ -916,3 +925,279 @@ footer a{
 }
 
 
+
+
+/* Contenedor para hacer la tabla responsiva */
+/* Contenedor responsivo */
+.table-responsive {
+    width: 100%;
+    overflow-x: auto;
+}
+
+/* Estilo de la tabla */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    min-width: 600px;
+    background: #fff;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Estilo de las celdas y encabezados */
+table th, table td {
+    white-space: nowrap;
+    padding: 12px;
+    text-align: left;
+    border: 1px solid #ddd;
+}
+
+/* Fondo y color de los encabezados */
+table thead {
+    background-color: #007bff !important;
+    color: white !important;
+}
+
+table th {
+    font-weight: bold;
+    text-transform: uppercase;
+}
+
+/* Agregar iconos a los encabezados */
+th:nth-child(1)::before { content: "\f02c  "; font-family: "Font Awesome 6 Free"; font-weight: 900; } /* ID */
+th:nth-child(2)::before { content: "\f007  "; font-family: "Font Awesome 6 Free"; font-weight: 900; } /* Nombre */
+th:nth-child(3)::before { content: "\f0e0  "; font-family: "Font Awesome 6 Free"; font-weight: 900; } /* Email */
+th:nth-child(4)::before { content: "\f2c2  "; font-family: "Font Awesome 6 Free"; font-weight: 900; } /* Rol */
+th:nth-child(5)::before { content: "\f058  "; font-family: "Font Awesome 6 Free"; font-weight: 900; } /* Estado */
+th:nth-child(6)::before { content: "\f073  "; font-family: "Font Awesome 6 Free"; font-weight: 900; } /* Creación */
+th:nth-child(7)::before { content: "\f017  "; font-family: "Font Awesome 6 Free"; font-weight: 900; } /* Último Acceso */
+th:nth-child(8)::before { content: "\f013  "; font-family: "Font Awesome 6 Free"; font-weight: 900; } /* Acciones */
+
+/* Alternar colores en filas */
+table tbody tr:nth-child(even) {
+    background-color: #f8f9fa;
+}
+
+/* Efecto hover */
+table tbody tr:hover {
+    background-color: #e9ecef;
+    transition: 0.3s;
+}
+
+/* Estilo de botones de acción */
+.action-buttons {
+    display: flex;
+    gap: 8px;
+}
+
+/* Estilos generales para los botones */
+.action-buttons a {
+    display: inline-block;
+    padding: 10px 15px;
+    border-radius: 8px;
+    text-align: center;
+    color: white;
+    font-size: 16px;
+    text-decoration: none;
+    margin-right: 10px;
+    transition: background-color 0.3s, transform 0.2s ease;
+}
+.action-buttons button  {
+    display: inline-block;
+    padding: 10px 15px;
+    border-radius: 8px;
+    text-align: center;
+    color: white;
+    font-size: 16px;
+    text-decoration: none;
+    margin-right: 10px;
+    transition: background-color 0.3s, transform 0.2s ease;
+}
+
+.action-buttons a:hover {
+    transform: scale(1.1); /* Efecto de ampliación al pasar el mouse */
+}
+.action-buttons button:hover {
+    transform: scale(1.1); /* Efecto de ampliación al pasar el mouse */
+}
+
+/* Estilo para el botón de editar (verde, como en iOS) */
+.action-buttons .edit {
+    background-color: #34c759; /* Verde suave de iOS */
+}
+
+.action-buttons .edit:hover {
+    background-color: #28a745; /* Sombra más oscura en hover */
+}
+
+/* Estilo para el botón de eliminar (rojo claro) */
+.action-buttons .delete {
+    background-color: #ff3b30; /* Rojo brillante de iOS */
+}
+
+.action-buttons .delete:hover {
+    background-color: #e0281b; /* Sombra más oscura en hover */
+}
+
+/* Estilo para el botón de desactivar (gris suave) */
+.action-buttons .Desactivar {
+    background-color: #8e8e93; /* Gris suave de iOS */
+}
+
+.action-buttons .Desactivar:hover {
+    background-color: #636366; /* Sombra más oscura en hover */
+}
+
+/* Estilo para el botón de activar (azul suave) */
+.action-buttons .Activar {
+    background-color: #007aff; /* Azul iOS */
+}
+
+.action-buttons .Activar:hover {
+    background-color: #0051d4; /* Sombra más oscura en hover */
+}
+
+/* Estilo para el botón de ver (azul claro) */
+.action-buttons .Ver {
+    background-color: #5ac8fa; /* Azul claro de iOS */
+}
+
+.action-buttons .Ver:hover {
+    background-color: #007aff; /* Sombra más oscura en hover */
+}
+
+/* Estilo para el botón de cambiar clave (amarillo suave) */
+.action-buttons .CambiarClave {
+    background-color: #ffcc005c; /* Amarillo iOS */
+}
+
+.action-buttons .CambiarClave:hover {
+    background-color: #e6b800; /* Sombra más oscura en hover */
+}
+
+
+/* Responsivo */
+@media screen and (max-width: 768px) {
+    .table-responsive {
+        overflow-x: scroll;
+        -webkit-overflow-scrolling: touch;
+    }
+
+    table {
+        min-width: 100%;
+    }
+
+    .action-buttons {
+        flex-direction: column;
+    }
+}
+
+
+
+
+
+
+
+
+/* Estilos para el contenedor del dashboard */
+.dashboard-container {
+    padding: 2rem;
+    background: var(--seccionTercera);
+    min-height: 100vh;
+}
+
+.dashboard-container h1 {
+    text-align: center;
+    font-size: 2.5rem;
+    color: var(--seccionPrimaria);
+    margin-bottom: 2rem;
+}
+
+/* Tarjeta de detalles del usuario */
+.user-details-card {
+    background: var(--text-blanco);
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    padding: 2rem;
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+/* Contenedor de la información del usuario */
+.user-info {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1.5rem;
+    margin-bottom: 2rem;
+}
+
+/* Estilos para cada ítem de información */
+.info-item {
+    display: flex;
+    flex-direction: column;
+}
+
+.info-item label {
+    font-weight: 600;
+    color: var(--seccionPrimaria);
+    margin-bottom: 0.5rem;
+}
+
+.info-item input {
+    padding: 0.75rem;
+    border: 2px solid var(--seccionPrimaria);
+    border-radius: 8px;
+    font-size: 1rem;
+    background: #f8f9fa;
+    color: var(--text-dark);
+    transition: all 0.3s ease;
+}
+
+.info-item input:focus {
+    outline: none;
+    border-color: var(--botones-color);
+    box-shadow: 0 0 8px var(--botones-color);
+}
+
+/* Contenedor de acciones del usuario */
+.user-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 1rem;
+}
+
+.user-actions .btn {
+    padding: 0.75rem 1.5rem;
+    font-size: 1rem;
+    border-radius: 8px;
+    transition: all 0.3s ease;
+}
+
+.user-actions .btn-primary {
+    background: var(--botones-color);
+    color: var(--text-dark);
+}
+
+.user-actions .btn-primary:hover {
+    background: var(--seccionPrimaria);
+    color: var(--text-blanco);
+}
+
+
+
+/* Responsivo */
+@media (max-width: 768px) {
+    .user-info {
+        grid-template-columns: 1fr;
+    }
+
+    .user-actions {
+        flex-direction: column;
+    }
+
+    .user-actions .btn {
+        width: 100%;
+        margin-bottom: 1rem;
+    }
+}

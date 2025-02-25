@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <div id="header"></div>
+    <script src="../../assets/js/SesionUser.js"></script>
+    <!-- jQuery debe estar antes de DataTables -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+    <!-- DataTables CSS -->
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css">
+
+    <!-- DataTables JS -->
+    <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+</head>
+
+<body>
+    <!-- Placeholder para menú -->
+    <div id="menul"></div>
+    <!-- Contenido único de la página -->
+    <div class="login-container">
+        <div class="login-wrapper">
+            <div class="login-content">
+                <div class="login-form-container">
+                    <div class="login-text">
+                        <h2>Actualizar Cuenta</h2>
+                    </div>
+                    <div class="login-form">
+                        <form id="formActualizarUsuario" method="post">
+                            Identificador del usuario
+                            <input type="text" name="UsuarioID" id="UsuarioID" placeholder="ID"
+                                required>
+                            Nombre Completo
+                            <input type="text" name="Nombre" id="Nombre" placeholder="Nombre Apellidos"
+                                required>
+                            Email
+                            <input type="email" name="Email" id="Email" placeholder="correo@rapiclean.com"
+                                required>
+                            Rol del usuario
+                            <select name="RolID" id="RolID" required>
+                                <option value="1">Administrador</option>
+                                <option value="2">Gerente</option>
+                                <option value="3">SubGerente</option>
+                                <option value="4">EmpleadoV</option>
+                                <option value="5">EmpleadoM</option>
+                                <option value="10">Administrador</option>
+                                <option value="11" selected>Usuario</option>
+                            </select>
+                            Estado
+                            <select name="Estado" id="Estado" required>
+                                <option value="Activo">Activo</option>
+                                <option value="Inactivo">Inactivo</option>
+                            </select>
+
+                            <div class="button-box">
+                                <button type="submit" class="default-btn">Actualizar Cuenta</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Placeholder para footer -->
+    <div id="footer"></div>
+    <!-- Cargar lógica -->
+    <script src="../../assets/js/LogicaComponents.js"></script>
+    <script src="../../assets/js/LogicaMenu.js"></script>
+    <script src="../../assets/js/Usuarios.js"></script>
+</body>
+
+</html>
