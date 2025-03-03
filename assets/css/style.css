@@ -965,14 +965,14 @@ table th {
 }
 
 /* Agregar iconos a los encabezados */
-th:nth-child(1)::before { content: "\f02c  "; font-family: "Font Awesome 6 Free"; font-weight: 900; } /* ID */
-th:nth-child(2)::before { content: "\f007  "; font-family: "Font Awesome 6 Free"; font-weight: 900; } /* Nombre */
-th:nth-child(3)::before { content: "\f0e0  "; font-family: "Font Awesome 6 Free"; font-weight: 900; } /* Email */
-th:nth-child(4)::before { content: "\f2c2  "; font-family: "Font Awesome 6 Free"; font-weight: 900; } /* Rol */
-th:nth-child(5)::before { content: "\f058  "; font-family: "Font Awesome 6 Free"; font-weight: 900; } /* Estado */
-th:nth-child(6)::before { content: "\f073  "; font-family: "Font Awesome 6 Free"; font-weight: 900; } /* Creación */
-th:nth-child(7)::before { content: "\f017  "; font-family: "Font Awesome 6 Free"; font-weight: 900; } /* Último Acceso */
-th:nth-child(8)::before { content: "\f013  "; font-family: "Font Awesome 6 Free"; font-weight: 900; } /* Acciones */
+/* th:nth-child(1)::before { content: "\f02c  "; font-family: "Font Awesome 6 Free"; font-weight: 900; } /* ID 
+th:nth-child(2)::before { content: "\f007  "; font-family: "Font Awesome 6 Free"; font-weight: 900; } 
+th:nth-child(3)::before { content: "\f0e0  "; font-family: "Font Awesome 6 Free"; font-weight: 900; } 
+th:nth-child(4)::before { content: "\f2c2  "; font-family: "Font Awesome 6 Free"; font-weight: 900; } 
+th:nth-child(5)::before { content: "\f058  "; font-family: "Font Awesome 6 Free"; font-weight: 900; } 
+th:nth-child(6)::before { content: "\f073  "; font-family: "Font Awesome 6 Free"; font-weight: 900; } 
+th:nth-child(7)::before { content: "\f017  "; font-family: "Font Awesome 6 Free"; font-weight: 900; }  
+th:nth-child(8)::before { content: "\f013  "; font-family: "Font Awesome 6 Free"; font-weight: 900; } */
 
 /* Alternar colores en filas */
 table tbody tr:nth-child(even) {
@@ -1023,6 +1023,13 @@ table tbody tr:hover {
 }
 
 /* Estilo para el botón de editar (verde, como en iOS) */
+.action-buttons .sale {
+    background-color: #007bff; /* Verde suave de iOS */
+}
+
+.action-buttons .sale:hover {
+    background-color: #0051d4; /* Sombra más oscura en hover */
+}
 .action-buttons .edit {
     background-color: #34c759; /* Verde suave de iOS */
 }

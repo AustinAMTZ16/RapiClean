@@ -20,103 +20,73 @@
 
     // Evento que se ejecuta cuando el DOM ha sido completamente cargado
     document.addEventListener("DOMContentLoaded", function() {
-        // Obtener el formulario de registro por su ID
-        const formRegistro = document.getElementById("formRegistro");
+        //Obtener el ID del cliente de la URL
+        const urlParams = new URLSearchParams(window.location.search);
+        const clienteID = urlParams.get('id');
+        //Mostrar clienteID en el input ClienteID
+        const inputClienteID = document.getElementById("ClienteID");
+        if (inputClienteID) {
+            inputClienteID.value = clienteID;
+        }
+        //Cargar los clientes si existe la tabla clientesTable
+        const clientesTable = document.getElementById("clientesTable");
         // Verificar si el formulario existe en la página antes de agregar el evento
-        if (formRegistro) {
-            formRegistro.addEventListener("submit", function(e) {
-                e.preventDefault(); // Prevenir el envío por defecto del formulario 
-                const formData = new FormData(formRegistro);
-                const data = {};
+        if (clientesTable) {
+            obtenerListaClientes();
 
+        }   
+        //Cargar el formulario de creación de cliente
+        const formCrearCliente = document.getElementById("formCrearCliente");
+        if (formCrearCliente) {
+            formCrearCliente.addEventListener("submit", function(e) {
+                e.preventDefault(); // Prevenir el envío por defecto del formulario 
+                const formData = new FormData(formCrearCliente);
+                const data = {};
                 formData.forEach((value, key) => {
                     data[key] = value;
                 });
-
-                registrarUsuario(data);
+                registrarCliente(data);
             });
         }
-        //Obtener el ID del usuario de la URL
-        const urlParams = new URLSearchParams(window.location.search);
-        const usuarioID = urlParams.get('id');
-        //Mostrar el ID del usuario en el input
-        const inputUsuarioID = document.getElementById("UsuarioID");
-        if (inputUsuarioID) {
-            inputUsuarioID.value = usuarioID;
-        }   
-        //Detalles de Usuario
-        const UsuarioDiv = document.getElementById("UsuarioDiv");
-        if (UsuarioDiv) {
-            inputUsuarioID.value = usuarioID;
-            obtenerUsuarioPorID(usuarioID)
-        } 
-        // Obtener el formulario de actualizarUsuario por su ID
-        const formActualizarUsuario = document.getElementById("formActualizarUsuario");
-        // Verificar si el formulario existe en la página antes de agregar el evento
-        if (formActualizarUsuario) {
-            obtenerUsuarioPorID(usuarioID);
-            formActualizarUsuario.addEventListener("submit", function(e) {
-                e.preventDefault(); // Prevenir el envío por defecto del formulario
-                const formData = new FormData(formActualizarUsuario);
+        //Cargar el formulario de modificar cliente
+        const formModificarCliente = document.getElementById("formModificarCliente");
+        if (formModificarCliente){
+            obtenerClientePorID(clienteID);
+            formModificarCliente.addEventListener("submit", function(e){
+                e.preventDefault(); // Prevenir el envío por defecto del formulario 
+                const formData = new FormData(formModificarCliente);
                 const data = {};
                 formData.forEach((value, key) => {
                     data[key] = value;
-                }); 
-                actualizarUsuario(data);
+                });
+                actualizarCliente(data);
             });
         }
-        //Obtener la tabla de usuarios
-        const tablaUsuarios = document.getElementById("usuariosTable");
-        if (tablaUsuarios) {
-            obtenerListaUsuarios();
-        }
+
         $(document).on('click', '.delete', function() {
-            const usuarioID = $(this).data('id');
-            eliminarUsuario(usuarioID);
+            const clienteID = $(this).data('id');
+            eliminarCliente(clienteID);
         });
         $(document).on('click', '.Desactivar', function() {
-            const usuarioID = $(this).data('id');
-            desactivarUsuario(usuarioID);
+            const clienteID = $(this).data('id');
+            desactivarCliente(clienteID);
         });
         $(document).on('click', '.Activar', function() {
-            const usuarioID = $(this).data('id');
-            activarUsuario(usuarioID);
+            const clienteID = $(this).data('id');
+            activarCliente(clienteID);
         });
         $(document).on('click', '.CambiarClave', function() {
-            const usuarioID = $(this).data('id');
-            cambiarClave(usuarioID);
+            const clienteID = $(this).data('id');
+            cambiarClave(clienteID);
         });
     });
-    //Funcion para registrarUsuario
-    function registrarUsuario(data) {
-        fetch(URL_BASE + 'registrarUsuario', {
-            method: 'POST', // Método HTTP para enviar la solicitud
-            headers: {
-                'Content-Type': 'application/json' // Indicar que los datos se envían en formato JSON   
-            },
-            body: JSON.stringify(data) // Convertir el objeto a una cadena JSON
-        })
-        .then(response => {
-            if (!response.ok) {
-                throw new Error(`Error en la solicitud: ${response.status}`); // Manejo de errores HTTP 
-            }
-            return response.json(); // Convertir la respuesta a JSON
-        })
-        .then(result => {
-            console.log(result);
-        })
-        .catch(error => {
-            console.error('Error al registrar usuario:', error);
-        });
-    }
-    //Funcion para actualizarUsuario
-    function actualizarUsuario(data) {
-        fetch(URL_BASE + 'actualizarUsuario', {
-            method: 'PATCH', // Método HTTP para enviar la solicitud 
+    //Funcion para obtenerListaClientes
+    function obtenerListaClientes() {
+        fetch(URL_BASE + 'obtenerListaClientes', {
+            method: 'GET', // Método HTTP para obtener la lista de clientes
             headers: {
                 'Content-Type': 'application/json' // Indicar que los datos se envían en formato JSON
-            },
-            body: JSON.stringify(data) // Convertir el objeto a una cadena JSON
+            }
         })
         .then(response => {
             if (!response.ok) {
@@ -126,43 +96,45 @@
         })
         .then(result => {
             console.log(result);
-        })
-        .catch(error => {
-            console.error('Error al actualizar usuario:', error);
-        }); 
-    }
-    // Función para obtener la lista de usuarios
-    function obtenerListaUsuarios() {
-        fetch(URL_BASE + 'obtenerListaUsuarios', {
-            method: 'GET',
-            headers: { 'Content-Type': 'application/json' }
-        })
-        .then(response => {
-            if (!response.ok) {
-                throw new Error(`Error en la solicitud: ${response.status}`);
-            }
-            return response.json();
-        })
-        .then(result => {
-            console.log(result);
 
             // Si ya hay una instancia previa de DataTable, destrúyela antes de volver a inicializar
-            if ($.fn.DataTable.isDataTable('#usuariosTable')) {
-                $('#usuariosTable').DataTable().destroy();
+            if ($.fn.DataTable.isDataTable('#clientesTable')) {
+                $('#clientesTable').DataTable().destroy();
             }
 
-            $('#usuariosTable').DataTable({
+            $('#clientesTable').DataTable({
                 data: result.data,
                 columns: [
-                    { data: 'UsuarioID' },
+                    { data: 'ClienteID' },
                     { data: 'Nombre' },
-                    { data: 'Email' },
-                    { 
-                        data: null, 
-                        render: function(data, type, row) {
-                            return row.RolID + ' - ' + row.NombreRol;
+                    {
+                        data: 'Email',
+                        render: function(data) {
+                            // Validar si el dato existe y no está vacío
+                            if (!data) {
+                                return ''; // Si no hay correo, devuelve una cadena vacía
+                            }
+                    
+                            // Crear el enlace de correo electrónico
+                            return `<a href="mailto:${data}" target="_blank">${data}</a>`;
                         }
                     },
+                    {
+                        data: 'Telefono',
+                        render: function(data) {
+                            // Validar si el dato existe y no está vacío
+                            if (!data) {
+                                return ''; // Si no hay teléfono, devuelve una cadena vacía
+                            }
+                    
+                            // Asegúrate de que el número de teléfono esté en el formato correcto
+                            const telefono = data.replace(/\D/g, ''); // Elimina caracteres no numéricos
+                    
+                            // Crear el enlace de WhatsApp
+                            return `<a href="https://api.whatsapp.com/send/?phone=521${telefono}&text&type=phone_number&app_absent=0" target="_blank">${telefono}</a>`;
+                        }
+                    },
+                    { data: 'PuntosRecompensa' },
                     { 
                         data: 'Estado',
                         render: function(data) {
@@ -180,45 +152,30 @@
                             // Reorganiza en formato dia-mes-año
                             return `${dia}-${mes}-${anio}`;
                         }
-                    },
-                    { 
-                        data: 'UltimoAcceso',
-                        render: function(data) {
-                            // Extrae solo la parte de la fecha (YYYY-MM-DD)
-                            const fecha = data.split(' ')[0];
-                            // Divide la fecha en partes (año, mes, día)
-                            const [anio, mes, dia] = fecha.split('-');
-                            
-                            // Reorganiza en formato dia-mes-año
-                            return `${dia}-${mes}-${anio}`;
-                        }
-                    },
+                     },
                     {
                         data: null,
                         orderable: false,
                         render: function(data, type, row) {
                             // Lógica para mostrar el botón de Activar o Desactivar según el Estatus
                             let activarODesactivar = row.Estado === 'Activo' 
-                                ? `<button class="btn Desactivar" data-id="${row.UsuarioID}">
+                                ? `<button class="btn Desactivar" data-id="${row.ClienteID}">
                                         <i class="fas fa-user-slash"></i> Desactivar
                                     </button>`
-                                : `<button class="btn Activar" data-id="${row.UsuarioID}">
+                                : `<button class="btn Activar" data-id="${row.ClienteID}">
                                         <i class="fas fa-user-check"></i> Activar
                                     </button>`;
             
                             return `
                                 <div class="action-buttons">
-                                    <a href="updateUser.html?id=${row.UsuarioID}" class="edit"><i class="fas fa-edit"></i> Editar</a>
-
-                                    <button class="btn delete" data-id="${row.UsuarioID}">
+                                    <a href="updateSale.html?id=${row.ClienteID}" class="sale"><i class="fas fa-cart-plus"></i> Venta</a>
+                                    <a href="updateCustomer.html?id=${row.ClienteID}" class="edit"><i class="fas fa-edit"></i> Editar</a>
+                                    <button class="btn delete" data-id="${row.ClienteID}">
                                         <i class="fas fa-trash-alt"></i> Eliminar
                                     </button>
-
                                     ${activarODesactivar}  <!-- Aquí se inserta el botón Activar/Desactivar -->
-
-                                    <a href="detailsUser.html?id=${row.UsuarioID}" class="Ver"><i class="fas fa-eye"></i> Ver</a>
-
-                                    <button class="btn CambiarClave" data-id="${row.UsuarioID}">
+                                    <a href="detailsCustomer.html?id=${row.ClienteID}" class="Ver"><i class="fas fa-eye"></i> Ver</a>
+                                    <button class="btn CambiarClave" data-id="${row.ClienteID}">
                                         <i class="fas fa-key"></i> Cambiar clave
                                     </button>
                                 </div>
@@ -256,15 +213,36 @@
                 responsive: true,
                 order: [[0, "desc"]]
             });
-
         })
         .catch(error => {
-            console.error('Error al obtener lista de usuarios:', error);
+            console.error('Error al obtener lista de clientes:', error);
         });
     }
-    //Funcion para obtenerUsuario por ID
-    async function obtenerUsuarioPorID(UsuarioID) {
-        return fetch(URL_BASE + 'obtenerListaUsuarios', {
+    //Funcion para registrar un cliente
+    function registrarCliente(data) {
+        fetch(URL_BASE + 'registrarCliente', {
+            method: 'POST', // Método HTTP para registrar un cliente
+            headers: {
+                'Content-Type': 'application/json' // Indicar que los datos se envían en formato JSON
+            },
+            body: JSON.stringify(data)
+        })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error(`Error en la solicitud: ${response.status}`); // Manejo de errores HTTP
+            }
+            return response.json(); // Convertir la respuesta a JSON
+        })
+        .then(result => {
+            console.log(result);
+        }) 
+        .catch(error => {
+            console.error('Error al registrar cliente:', error);
+        });
+    }
+    //Funcion para obtener un cliente por su ID
+    async function obtenerClientePorID(clienteID) {
+        return fetch(URL_BASE + 'obtenerListaClientes', {
             method: 'GET',
             headers: { 'Content-Type': 'application/json' }
         })
@@ -275,57 +253,70 @@
             return response.json();
         })
         .then(result => {
-            console.log('idUsuario: ', UsuarioID);
+            console.log('idCliente: ', clienteID);
             try {
-                console.log('result obtenerUsuarioPorID: ', result.data);
+                console.log('result obtenerClientePorID: ', result.data);
         
-                const usuario = result.data.find(usuario => usuario.UsuarioID == UsuarioID);
-                console.log('Usuario obtenido:', usuario);
+                const cliente = result.data.find(cliente => cliente.ClienteID == clienteID);
+                console.log('Cliente obtenido:', cliente);
         
-                if (usuario) {
-                    document.getElementById("UsuarioID").value = usuario.UsuarioID;
-                    document.getElementById("Nombre").value = usuario.Nombre;
-                    document.getElementById("Email").value = usuario.Email;
-                    if (document.getElementById("RolName")) {
-                        document.getElementById("RolName").value = usuario.RolID + ' - ' + usuario.NombreRol;
-                    }
-                    if (document.getElementById("RolID")) {
-                        document.getElementById("RolID").value = usuario.RolID; 
-                    }
-                    document.getElementById("Estado").value = usuario.Estado;
-                    if (document.getElementById("FechaCreacion")) {
-                        document.getElementById("FechaCreacion").value = usuario.FechaCreacion;
-                    }
-                    if (document.getElementById("UltimoAcceso")) {
-                        document.getElementById("UltimoAcceso").value = usuario.UltimoAcceso;
-                    }
-                    if (document.getElementById("Password")) {
-                        document.getElementById("Password").value = 'hola';
-                    }
+                if (cliente) {
+                    document.getElementById("ClienteID").value = cliente.ClienteID;
+                    document.getElementById("Nombre").value = cliente.Nombre;
+                    document.getElementById("Email").value = cliente.Email;
+                    document.getElementById("Telefono").value = cliente.Telefono;
+                    document.getElementById("Direccion").value = cliente.Direccion;
+                    document.getElementById("Ciudad").value = cliente.Ciudad;
+                    document.getElementById("Pais").value = cliente.Pais;
+                    document.getElementById("Password").value = cliente.Password;
+                    document.getElementById("PuntosRecompensa").value = cliente.PuntosRecompensa;
+                    document.getElementById("Estado").value = cliente.Estado;   
 
                 } else {
-                    console.error("Usuario no encontrado");
+                    console.error("Cliente no encontrado");
                 }
             } catch (error) {
-                console.error("Error en obtenerUsuarioPorID:", error);
+                console.error("Error en obtenerClientePorID:", error);
             }
         })
         .catch(error => {
-            console.error('Error al obtener lista de usuarios:', error);
+            console.error('Error al obtener lista de clientes:', error);
             throw error; // Importante para que el error se propague y pueda ser capturado
         });
     }
-    //Funcion para eliminarUsuario
-    function eliminarUsuario(UsuarioID) {
+    //Funcion para actualizar un cliente
+    function actualizarCliente(data) {
+        fetch(URL_BASE + 'actualizarCliente', {
+            method: 'PATCH', // Método HTTP para actualizar un cliente
+            headers: {
+                'Content-Type': 'application/json' // Indicar que los datos se envían en formato JSON
+            },
+            body: JSON.stringify(data)
+        })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error(`Error en la solicitud: ${response.status}`);
+            }
+            return response.json();
+        })
+        .then(result => {
+            console.log('result actualizarCliente: ', result);
+        })
+        .catch(error => {
+            console.error('Error al actualizar cliente:', error);
+        }); 
+    }
+    //Funcion para eliminarCliente
+    function eliminarCliente(ClienteID) {
         // Confirmación del usuario antes de eliminar
         const confirmDelete = confirm("¿Estás seguro de que deseas eliminar este registro?");
         if (!confirmDelete) {
             return; // Si el usuario cancela, salimos de la función
         }
         const data = {
-            UsuarioID: UsuarioID
+            ClienteID: ClienteID
         };
-        fetch(URL_BASE + 'eliminarUsuario', {
+        fetch(URL_BASE + 'eliminarCliente', {
             method: 'DELETE',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(data)
@@ -340,37 +331,37 @@
             console.log(result);
         })
         .catch(error => {
-            console.error('Error al eliminar usuario:', error);
+            console.error('Error al eliminar cliente:', error);
         }); 
     }
-    //Funcion para activarUsuario
-    function activarUsuario(UsuarioID){
+    //Funcion para activarCliente
+    function activarCliente(ClienteID){
         // Confirmación del usuario antes de eliminar
         const confirmDelete = confirm("¿Estás seguro de Activar el estado de la cuenta?");
         if (!confirmDelete) {
             return; // Si el usuario cancela, salimos de la función
         }
         const data = {
-            UsuarioID: UsuarioID,
+            ClienteID: ClienteID,
             Estado : 'Activo'
         };
-        actualizarUsuario(data)
+        actualizarCliente(data)
     }
-    //Funcion para desactivarUsuario
-    function desactivarUsuario(UsuarioID){
+    //Funcion para desactivarCliente
+    function desactivarCliente(ClienteID){
         // Confirmación del usuario antes de eliminar
         const confirmDelete = confirm("¿Estás seguro de Desactivar el estado de la cuenta?");
         if (!confirmDelete) {
             return; // Si el usuario cancela, salimos de la función
         }
         const data = {
-            UsuarioID: UsuarioID,
+            ClienteID: ClienteID,
             Estado : 'Inactivo'
         };
-        actualizarUsuario(data)
+        actualizarCliente(data)
     }
     //Funcion para cambiarClave
-    function cambiarClave(UsuarioID){
+    function cambiarClave(ClienteID){
         const nuevaClave = prompt("Por favor, ingrese la nueva clave de la cuenta:");
         if (nuevaClave === null) {
             // El usuario hizo clic en "Cancelar"
@@ -384,10 +375,10 @@
             // El usuario ingresó una clave
 
             const data = {
-                UsuarioID: UsuarioID,
+                ClienteID: ClienteID,
                 Password : nuevaClave
             };
-            actualizarUsuario(data)
+            actualizarCliente(data)
         }
     } 
 })();

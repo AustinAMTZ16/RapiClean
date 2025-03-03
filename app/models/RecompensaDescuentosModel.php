@@ -119,7 +119,8 @@ class RecompensaDescuentosModel {
         $sql = "SELECT 
                     r.RecompensaID,
                     r.Descripcion,
-                    r.PuntosNecesarios
+                    r.PuntosNecesarios,
+                    r.UsuarioID
                 FROM Recompensas r";
         $stmt = $this->conn->prepare($sql); 
         $stmt->execute();

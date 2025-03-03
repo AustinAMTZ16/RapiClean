@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <div id="header"></div>
+    <script src="../../assets/js/SesionUser.js"></script>
+    <!-- En el head -->
+    <!-- jQuery debe estar antes de DataTables -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <!-- DataTables CSS -->
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css">
+    <!-- DataTables JS -->
+    <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+
+</head>
+
+<body>
+    <!-- Placeholder para menú -->
+    <div id="menul"></div>
+    <!-- Contenido único de la página -->
+    <div class="dashboard-container">
+        <div class="login-form" style="width: 90%; margin: 20px auto;">
+            <h2 style="text-align: center; margin-bottom: 20px;">Modificar datos del cliente</h2>
+            <form id="formModificarCliente">
+                <!-- Información básica del cliente -->
+                <label for="ClienteID">ID del cliente</label>
+                <input type="text" id="ClienteID" name="ClienteID" value="0" required readonly>
+            
+                <label for="Nombre">Nombre Completo</label>
+                <input type="text" id="Nombre" name="Nombre" required>
+            
+                <!-- Información de contacto -->
+                <label for="Email">Correo Electrónico</label>
+                <input type="email" id="Email" name="Email" required>
+            
+                <label for="Telefono">Teléfono</label>
+                <input type="tel" id="Telefono" name="Telefono" required>
+
+                <!-- Información de ubicación -->
+                <label for="Direccion">Dirección</label>
+                <input type="text" id="Direccion" name="Direccion" required>
+            
+                <label for="Ciudad">Ciudad</label>
+                <input type="text" id="Ciudad" name="Ciudad" value="Puebla" required>
+            
+                <label for="Pais">País</label>
+                <input type="text" id="Pais" name="Pais" value="México" required>
+            
+                <!-- Información de la cuenta -->
+                <label for="Password">Clave de acceso</label>
+                <input type="password" id="Password" name="Password" required>
+            
+                <label for="PuntosRecompensa">Puntos de recompensa acumulados</label>
+                <input type="number" id="PuntosRecompensa" name="PuntosRecompensa" value="0" required readonly>
+            
+                <label for="Estado">Estado de la cuenta</label>
+                <select id="Estado" name="Estado" required>
+                    <option value="Activo">Activo</option>
+                    <option value="Inactivo">Inactivo</option>
+                </select>
+            
+                <label for="FechaCreacion">Fecha de creación</label>
+                <input type="date" id="FechaCreacion" name="FechaCreacion" required readonly>
+            
+                <label for="UltimoAcceso">Último acceso</label>
+                <input type="datetime-local" id="UltimoAcceso" name="UltimoAcceso" required readonly>
+                <button type="submit" class="default-btn">Modificar Cliente</button>
+            </form>
+        </div>
+    </div>
+    
+    <!-- Placeholder para footer -->
+    <div id="footer"></div>
+    <!-- Cargar lógica -->
+    <script src="../../assets/js/LogicaComponents.js"></script>
+    <script src="../../assets/js/LogicaMenu.js"></script>
+    <script src="../../assets/js/Clientes.js"></script>
+    <script>
+        // Obtener la fecha y hora actual
+        const ahora = new Date();
+    
+        // Formatear la fecha para el campo "FechaCreacion" (YYYY-MM-DD)
+        const fechaCreacion = ahora.toISOString().split('T')[0];
+    
+        // Formatear la fecha y hora para el campo "UltimoAcceso" (YYYY-MM-DDThh:mm)
+        const ultimoAcceso = new Date(ahora.getTime() - ahora.getTimezoneOffset() * 60000).toISOString().slice(0, 16);
+    
+        // Asignar los valores a los campos del formulario
+        document.getElementById('FechaCreacion').value = fechaCreacion;
+        document.getElementById('UltimoAcceso').value = ultimoAcceso;
+    </script>
+</body>
+
+</html>

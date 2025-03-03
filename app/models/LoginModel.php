@@ -128,18 +128,33 @@ class LoginModel {
         $Nombre = isset($data['Nombre']) && $data['Nombre'] !== '' ? $data['Nombre'] : null;
         $Email = isset($data['Email']) && $data['Email'] !== '' ? $data['Email'] : null;
         $Password = isset($data['Password']) && $data['Password'] !== '' ? $data['Password'] : null;
+        $PuntosRecompensa = isset($data['PuntosRecompensa']) && $data['PuntosRecompensa'] !== '' ? $data['PuntosRecompensa'] : null;
+        $Estado = isset($data['Estado']) && $data['Estado'] !== '' ? $data['Estado'] : null;
+        $FechaCreacion = isset($data['FechaCreacion']) && $data['FechaCreacion'] !== '' ? $data['FechaCreacion'] : null;
+        $UltimoAcceso = isset($data['UltimoAcceso']) && $data['UltimoAcceso'] !== '' ? $data['UltimoAcceso'] : null;
+        $Telefono = isset($data['Telefono']) && $data['Telefono'] !== '' ? $data['Telefono'] : null;
+        $Direccion = isset($data['Direccion']) && $data['Direccion'] !== '' ? $data['Direccion'] : null;
+        $Ciudad = isset($data['Ciudad']) && $data['Ciudad'] !== '' ? $data['Ciudad'] : null;
+        $Pais = isset($data['Pais']) && $data['Pais'] !== '' ? $data['Pais'] : null;
         // Validar que los datos sean correctos
         if (!isset($data['Nombre']) || !isset($data['Email']) || !isset($data['Password'])) {
             throw new Exception("Faltan datos de registro de cliente.");
         }   
         // Consulta SQL para registrar el cliente
-        $sql = "INSERT INTO Clientes (Nombre, Email, Password, RolID, Estado) 
-                VALUES (:Nombre, :Email, :Password, 0, 'Activo')";
+        $sql = "INSERT INTO Clientes (Nombre, Email, Password, PuntosRecompensa, Estado, FechaCreacion, UltimoAcceso, Telefono, Direccion, Ciudad, Pais) 
+                VALUES (:Nombre, :Email, :Password, :PuntosRecompensa, :Estado, :FechaCreacion, :UltimoAcceso, :Telefono, :Direccion, :Ciudad, :Pais)";
         $stmt = $this->conn->prepare($sql);
         $stmt->bindParam(':Nombre', $Nombre);
         $stmt->bindParam(':Email', $Email);
         $stmt->bindParam(':Password', $Password);
-
+        $stmt->bindParam(':PuntosRecompensa', $PuntosRecompensa);
+        $stmt->bindParam(':Estado', $Estado);
+        $stmt->bindParam(':FechaCreacion', $FechaCreacion);
+        $stmt->bindParam(':UltimoAcceso', $UltimoAcceso);
+        $stmt->bindParam(':Telefono', $Telefono);
+        $stmt->bindParam(':Direccion', $Direccion);
+        $stmt->bindParam(':Ciudad', $Ciudad);
+        $stmt->bindParam(':Pais', $Pais);
         if ($stmt->execute()) {
             return $this->conn->lastInsertId(); 
         } else {
@@ -212,9 +227,15 @@ class LoginModel {
         $Password = isset($data['Password']) && $data['Password'] !== '' ? $data['Password'] : $cliente['Password'];
         $PuntosRecompensa = isset($data['PuntosRecompensa']) && $data['PuntosRecompensa'] !== '' ? $data['PuntosRecompensa'] : $cliente['PuntosRecompensa'];
         $Estado = isset($data['Estado']) && $data['Estado'] !== '' ? $data['Estado'] : $cliente['Estado'];
+        $Telefono = isset($data['Telefono']) && $data['Telefono'] !== '' ? $data['Telefono'] : $cliente['Telefono'];
+        $Direccion = isset($data['Direccion']) && $data['Direccion'] !== '' ? $data['Direccion'] : $cliente['Direccion'];
+        $Ciudad = isset($data['Ciudad']) && $data['Ciudad'] !== '' ? $data['Ciudad'] : $cliente['Ciudad'];
+        $Pais = isset($data['Pais']) && $data['Pais'] !== '' ? $data['Pais'] : $cliente['Pais'];
+        $UltimoAcceso = isset($data['UltimoAcceso']) && $data['UltimoAcceso'] !== '' ? $data['UltimoAcceso'] : $cliente['UltimoAcceso'];
+        $FechaCreacion = isset($data['FechaCreacion']) && $data['FechaCreacion'] !== '' ? $data['FechaCreacion'] : $cliente['FechaCreacion'];
 
         // Consulta SQL para actualizar el cliente
-        $sql = "UPDATE Clientes SET Nombre = :Nombre, Email = :Email, Password = :Password, PuntosRecompensa = :PuntosRecompensa, Estado = :Estado WHERE ClienteID = :ClienteID";
+        $sql = "UPDATE Clientes SET Nombre = :Nombre, Email = :Email, Password = :Password, PuntosRecompensa = :PuntosRecompensa, Estado = :Estado, Telefono = :Telefono, Direccion = :Direccion, Ciudad = :Ciudad, Pais = :Pais, UltimoAcceso = :UltimoAcceso, FechaCreacion = :FechaCreacion WHERE ClienteID = :ClienteID";
         $stmt = $this->conn->prepare($sql);
         $stmt->bindParam(':ClienteID', $data['ClienteID']);
         $stmt->bindParam(':Nombre', $Nombre);
@@ -222,7 +243,12 @@ class LoginModel {
         $stmt->bindParam(':Password', $Password);
         $stmt->bindParam(':PuntosRecompensa', $PuntosRecompensa);
         $stmt->bindParam(':Estado', $Estado);
-
+        $stmt->bindParam(':Telefono', $Telefono);
+        $stmt->bindParam(':Direccion', $Direccion);
+        $stmt->bindParam(':Ciudad', $Ciudad);
+        $stmt->bindParam(':Pais', $Pais);
+        $stmt->bindParam(':UltimoAcceso', $UltimoAcceso);
+        $stmt->bindParam(':FechaCreacion', $FechaCreacion);
         if ($stmt->execute()) {
             return true;
         } else {
@@ -336,7 +362,7 @@ class LoginModel {
 
     //Obtener Lista de Clientes
     public function obtenerListaClientes() {
-        $sql = "SELECT ClienteID,Nombre,Email,PuntosRecompensa,Estado,FechaCreacion,UltimoAcceso FROM Clientes ORDER BY ClienteID ASC";
+        $sql = "SELECT ClienteID,Nombre,Email,Telefono,Direccion,Ciudad,Pais,PuntosRecompensa,Estado,FechaCreacion,UltimoAcceso FROM Clientes ORDER BY ClienteID ASC";
         $stmt = $this->conn->prepare($sql);
         $stmt->execute();
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
