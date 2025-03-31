@@ -137,7 +137,7 @@ class LoginModel {
         $Ciudad = isset($data['Ciudad']) && $data['Ciudad'] !== '' ? $data['Ciudad'] : null;
         $Pais = isset($data['Pais']) && $data['Pais'] !== '' ? $data['Pais'] : null;
         // Validar que los datos sean correctos
-        if (!isset($data['Nombre']) || !isset($data['Email']) || !isset($data['Password'])) {
+        if (!isset($data['Nombre']) || !isset($data['Email'])) {
             throw new Exception("Faltan datos de registro de cliente.");
         }   
         // Consulta SQL para registrar el cliente

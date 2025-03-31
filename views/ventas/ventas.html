@@ -1,43 +1,227 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <div id="header"></div>
     <script src="../../assets/js/SesionUser.js"></script>
+    <style>
+        :root {
+            --azul: #6CB4EE;
+            --naranja: #FFA500;
+            --blanco: #FFFFFF;
+        }
+
+        /* Nuevos estilos responsivos */
+        @media (max-width: 768px) {
+            .login-form {
+                width: 100% !important;
+                margin: 10px auto !important;
+                padding: 5px;
+            }
+
+            table {
+                font-size: 12px;
+            }
+
+            th,
+            td {
+                padding: 5px;
+            }
+
+            .total-section {
+                font-size: 1.2rem;
+                padding: 10px;
+            }
+
+            textarea {
+                width: 100% !important;
+                height: 100px;
+            }
+
+            .cliente-section {
+                display: flex;
+                flex-direction: column;
+                gap: 10px;
+            }
+
+            #buscarCliente,
+            .btn {
+                width: 100%;
+                box-sizing: border-box;
+            }
+
+            .modal-content {
+                width: 90%;
+                margin: 20px auto;
+            }
+
+
+        }
+
+        /* Modificaciones generales para responsividad */
+        .modal-content {
+            max-width: 300px;
+            width: 90%;
+        }
+
+        textarea {
+            max-width: 100%;
+        }
+
+        .btn {
+            padding: 10px 15px;
+            font-size: 14px;
+        }
+
+        /* Mantener estilos originales */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+        }
+
+        .cliente-item {
+            background-color: #209011 !important;
+            color: #fff !important;
+            padding: 10px !important;
+            border-radius: 5px !important;
+            cursor: pointer !important;
+            font-size: 18px !important;
+        }
+
+        .cliente-item:hover {
+            background-color: #82a97d !important;
+        }
+
+        .total-section {
+            background-color: #ffffff;
+            /* Fondo claro para destacar */
+            padding: 15px;
+            border: 2px solid #007bff;
+            /* Borde azul para resaltar */
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            /* Sombra suave */
+            text-align: center;
+        }
+
+        .total-section p {
+            font-size: 18px;
+            font-weight: bold;
+            margin: 10px 0;
+        }
+
+        .total-section span {
+            font-size: 20px;
+            font-weight: bold;
+            color: #28a745;
+            /* Verde para destacar el total */
+        }
+
+        .total-section p:last-of-type {
+            font-size: 22px;
+            color: #dc3545;
+            /* Rojo para resaltar el total */
+            text-transform: uppercase;
+            border-top: 2px dashed #dc3545;
+            padding-top: 10px;
+        }
+
+        #metodoPago,
+        #comentarios {
+            margin-top: 10px;
+        }
+
+
+        @media print {
+            body * {
+                visibility: hidden;
+            }
+
+            #ticket,
+            #ticket * {
+                visibility: visible;
+            }
+
+            #ticket {
+                position: absolute;
+                left: 0;
+                top: 0;
+                width: 80mm !important;
+                background: white;
+                box-shadow: none;
+            }
+        }
+    </style>
 </head>
+
 <body>
     <!-- Placeholder para menú -->
     <div id="menul"></div>
-   <!-- Contenido único de la página -->
-   <div class="dashboard-container">
-        <div class="card" style="width: 90%; margin: 20px auto;">
-            <h2 style="text-align: center; margin-bottom: 20px;">Ventas</h2>    
+    <!-- Contenido único de la página -->
+    <div class="dashboard-container">
+        <div class="login-form" id="formVenta" style="width: 90%; margin: 20px auto;">
+            <!-- Sección Cliente -->
+            <div class="cliente-section">
+                <input type="text" id="buscarCliente" placeholder="Buscar cliente..." onkeyup="buscarCliente()">
+                <button type="button" class="btn btn-primary" onclick="abrirModalCliente()">Nuevo Cliente</button>
+                <div id="resultadosClientes"></div>
+            </div>
+            <!-- Modal Nuevo Cliente -->
+            <div id="modalCliente" class="modal">
+                <div class="modal-content">
+                    <h3>Registrar Nuevo Cliente</h3>
+                    <input type="text" id="nombreCliente" placeholder="Nombre completo" required>
+                    <input type="tel" id="telefonoCliente" placeholder="Teléfono">
+                    <input type="email" id="emailCliente" placeholder="Correo">
+                    <button type="button" class="btn btn-primary" onclick="guardarCliente()">Guardar</button>
+                    <button type="button" class="btn btn-secondary" onclick="cerrarModalCliente()">Cancelar</button>
+                </div>
+            </div>
             <div class="table-responsive">
-                <table id="recompensasTable" class="display nowrap">
+                <!-- Tabla de Servicios -->
+                <table id="tablaServicios" class="display nowrap">
                     <thead>
                         <tr>
-                            <th>VentaID</th>
-                            <th>UsuarioID</th>
-                            <th>ClienteID</th>
-                            <th>Fecha</th>
-                            <th>Total</th>
-                            <th>EstadoVenta</th>
-                            <th>MetodoPago</th>
-                            <th>DescuentoID</th>
-                            <th>MontoDescuento</th>
-                            <th>Acciones</th>
+                            <th>Seleccionar</th>
+                            <th>Servicio</th>
+                            <th>Precio</th>
+                            <th>Cantidad</th>
                         </tr>
                     </thead>
                     <tbody></tbody>
                 </table>
             </div>
+            <!-- Sección Total y Descuentos -->
+            <div class="total-section">
+                <input type="text" id="codigoDescuento" placeholder="Código de descuento">
+                <p hidden>Subtotal: $<span id="subtotal">0.00</span></p>
+                <p hidden>Descuento: $<span id="descuento">0.00</span></p>
+                <p>Total: $<span id="total">0.00</span></p>
+                <select id="metodoPago">
+                    <option value="Efectivo">Efectivo</option>
+                    <option value="Tarjeta">Tarjeta</option>
+                </select>
+                <textarea id="comentarios" placeholder="Comentarios..." style="width: 100%; height: 100px;"></textarea>
+                <button type="button" class="btn btn-primary" id="btnFinalizarVenta" onclick="finalizarVenta()">Finalizar Venta</button>
+            </div>
+
+            <!-- Dentro de .total-section -->
+            <button type="button" class="btn btn-success" id="btnImprimir" style="display: none;"
+                onclick="imprimirTicket()">Imprimir Ticket</button>
         </div>
     </div>
     <!-- Placeholder para footer -->
     <div id="footer"></div>
-    <!-- Cargar lógica --> 
+    <!-- Cargar lógica -->
     <script src="../../assets/js/LogicaComponents.js"></script>
     <script src="../../assets/js/LogicaMenu.js"></script>
     <script src="../../assets/js/Ventas.js"></script>
 </body>
+
 </html>
