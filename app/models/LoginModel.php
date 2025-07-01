@@ -37,11 +37,11 @@ class LoginModel {
         // Consulta SQL para obtener el usuario o cliente
         $sql = "SELECT 'Usuario' AS Tipo, UsuarioID AS ID, Nombre, Email, RolID AS Rol, Estado, FechaCreacion 
             FROM Usuarios 
-            WHERE Email = :Email AND Password = :Password
+            WHERE (Email = :Email OR Telefono = :Email) AND Password = :Password
             UNION 
             SELECT 'Cliente' AS Tipo, ClienteID AS ID, Nombre, Email, NULL AS Rol, Estado, FechaCreacion 
             FROM Clientes 
-            WHERE Email = :Email AND Password = :Password";
+            WHERE (Email = :Email OR Telefono = :Email)  AND Password = :Password";
         $stmt = $this->conn->prepare($sql);
         // Limpia y filtra los datos antes de insertarlos en la base de datos
         $data['Email'] = filter_var($data['Email'], FILTER_SANITIZE_EMAIL); 

@@ -38,27 +38,35 @@
     //Funcion para listarTickets
     function listarTickets() {
         fetch(URL_BASE + 'listarVentas', {
-            method: 'GET', // Método HTTP para obtener la lista de clientes
-            headers: {
-                'Content-Type': 'application/json' // Indicar que los datos se envían en formato JSON
-            }
+            method: 'GET',
+            headers: { 'Content-Type': 'application/json' }
         })
         .then(response => {
-            if (!response.ok) {
-                throw new Error(`Error en la solicitud: ${response.status}`); // Manejo de errores HTTP
-            }
-            return response.json(); // Convertir la respuesta a JSON
+            if (!response.ok) throw new Error(`Error en la solicitud: ${response.status}`);
+            return response.json();
         })
         .then(result => {
-            console.log(result);
-
-            // Si ya hay una instancia previa de DataTable, destrúyela antes de volver a inicializar
+            console.log("Datos originales:", result.data);
+    
+            // 🔄 Filtrar solo una fila por VentaID (la primera ocurrencia)
+            const ventasUnicas = [];
+            const idsAgregados = new Set();
+    
+            for (const venta of result.data) {
+                if (!idsAgregados.has(venta.VentaID)) {
+                    ventasUnicas.push(venta);
+                    idsAgregados.add(venta.VentaID);
+                }
+            }
+    
+            console.log("Ventas únicas:", ventasUnicas);
+    
             if ($.fn.DataTable.isDataTable('#ticketsTable')) {
                 $('#ticketsTable').DataTable().destroy();
             }
-
+    
             $('#ticketsTable').DataTable({
-                data: result.data,
+                data: ventasUnicas,
                 columns: [
                     { data: 'VentaID' },
                     { data: 'Cliente' },
@@ -82,19 +90,13 @@
                                 : `<button class="btn Activar" data-id="${row.TicketID}">
                                         <i class="fas fa-user-check"></i> Activar
                                     </button>`;
-            
                             return `
                                 <div class="action-buttons">
                                     <a href="updateDescuento.html?id=${row.DescuentoID}" class="sale"><i class="fas fa-cart-plus"></i> Venta</a>
                                     <a href="updateTicket.html?id=${row.TicketID}" class="edit"><i class="fas fa-edit"></i> Editar</a>
-                                    <button class="btn delete" data-id="${row.TicketID}">
-                                        <i class="fas fa-trash-alt"></i> Eliminar
-                                    </button>
-                                    ${activarODesactivar}  <!-- Aquí se inserta el botón Activar/Desactivar -->
+                                    <button class="btn delete" data-id="${row.TicketID}"><i class="fas fa-trash-alt"></i> Eliminar</button>
                                     <a href="detailsTicket.html?id=${row.TicketID}" class="Ver"><i class="fas fa-eye"></i> Ver</a>
-                                    <button class="btn CambiarClave" data-id="${row.TicketID}">
-                                        <i class="fas fa-key"></i> Cambiar clave
-                                    </button>
+                                    <button class="btn CambiarClave" data-id="${row.TicketID}"><i class="fas fa-key"></i> Cambiar clave</button>
                                 </div>
                             `;
                         }
@@ -132,7 +134,8 @@
             });
         })
         .catch(error => {
-            console.error('Error al obtener lista de clientes:', error);
+            console.error('Error al obtener lista de tickets:', error);
         });
     }
+    
 })();

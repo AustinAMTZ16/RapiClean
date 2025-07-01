@@ -1,4 +1,4 @@
-(function() {
+(function () {
     // Definición de la configuración para los entornos de desarrollo y producción
     let CONFIG = {
         development: {
@@ -53,7 +53,7 @@
     // Inicializar la aplicación
     async function iniciarApp() {
         const btnFinalizarVenta = document.getElementById("btnFinalizarVenta");
-    
+
         if (btnFinalizarVenta) {
             btnFinalizarVenta.addEventListener("click", function (e) {
                 e.preventDefault();
@@ -61,10 +61,10 @@
         } else {
             console.warn("Botón 'btnFinalizarVenta' no encontrado en el DOM.");
         }
-    
+
         // ✅ Esperamos a que se carguen los datos primero
         await cargarDatosBase();
-    
+
         // ✅ Luego sí pintamos la tabla con los servicios ya disponibles
         cargarServicios();
     }
@@ -77,32 +77,84 @@
             },
             body: JSON.stringify(data) // Convertir el objeto a una cadena JSON
         })
-        .then(response => {
-            if (!response.ok) {
-                throw new Error(`Error en la solicitud: ${response.status}`); // Manejo de errores HTTP
-            }
-            return response.json(); // Convertir la respuesta a JSON
-        })
-        .then(result => {
-            console.log(result);
-        })
-        .catch(error => {
-            // Manejo de errores en caso de fallo en la solicitud
-            alert('Hubo un problema al procesar la solicitud. Por favor, inténtalo de nuevo.');
-        });
-    }    
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error(`Error en la solicitud: ${response.status}`); // Manejo de errores HTTP
+                }
+                return response.json(); // Convertir la respuesta a JSON
+            })
+            .then(result => {
+                console.log(result);
+            })
+            .catch(error => {
+                // Manejo de errores en caso de fallo en la solicitud
+                alert('Hubo un problema al procesar la solicitud. Por favor, inténtalo de nuevo.');
+            });
+    }
     // Inicializar tabla de servicios
     function cargarServicios() {
-        let tbody = document.querySelector('#tablaServicios tbody');
-        servicios.forEach(servicio => {
-            let tr = document.createElement('tr');
-            tr.innerHTML = `
-                <td><input type="checkbox" onchange="actualizarCarrito(${servicio.id}, this)"></td>
-                <td>${servicio.nombre}</td>
-                <td>$${servicio.precio.toFixed(2)}</td>
-                <td><input type="number" min="1" value="1" id="cantidad-${servicio.id}"></td>
-            `;
-            tbody.appendChild(tr);
+        // Si ya existe una instancia previa, destrúyela para evitar duplicación
+        if ($.fn.DataTable.isDataTable('#tablaServicios')) {
+            $('#tablaServicios').DataTable().destroy();
+        }
+
+        // Limpiar el tbody por si quedó algo residual
+        $('#tablaServicios tbody').empty();
+
+        // Inicializar el DataTable
+        $('#tablaServicios').DataTable({
+            data: servicios,
+            columns: [
+                {
+                    data: 'id',
+                    render: function (data) {
+                        return `<input type="checkbox" onchange="actualizarCarrito(${data}, this)">`;
+                    },
+                    orderable: false
+                },
+                { data: 'nombre' },
+                {
+                    data: 'precio',
+                    render: function (data) {
+                        return `$${parseFloat(data).toFixed(2)}`;
+                    }
+                },
+                {
+                    data: 'id',
+                    render: function (data) {
+                        return `<input type="number" min="1" value="1" id="cantidad-${data}">`;
+                    },
+                    orderable: false
+                }
+            ],
+            paging: true,
+            searching: true,
+            ordering: true,
+            info: true,
+            language: {
+                processing: "Procesando...",
+                search: "Buscar:",
+                lengthMenu: "Mostrar _MENU_ registros",
+                info: "Mostrando _START_ a _END_ de _TOTAL_ registros",
+                infoEmpty: "Mostrando 0 a 0 de 0 registros",
+                infoFiltered: "(filtrado de _MAX_ registros totales)",
+                loadingRecords: "Cargando...",
+                zeroRecords: "No se encontraron resultados",
+                emptyTable: "No hay datos disponibles en la tabla",
+                paginate: {
+                    first: "Primero",
+                    previous: "Anterior",
+                    next: "Siguiente",
+                    last: "Último"
+                },
+                aria: {
+                    sortAscending: ": Activar para ordenar la columna de manera ascendente",
+                    sortDescending: ": Activar para ordenar la columna de manera descendente"
+                }
+            },
+            pageLength: 5,
+            lengthMenu: [[5, 10, 25, 50, -1], [5, 10, 25, 50, "Todos"]],
+            responsive: true
         });
     }
     // Funcionalidades de Clientes
@@ -276,11 +328,11 @@
         // Cargar clientes
         let resClientes = await fetch(URL_BASE + 'obtenerListaClientes');
         let jsonClientes = await resClientes.json();
-    
+
         // Cargar servicios
         let resServicios = await fetch(URL_BASE + 'listaServicios');
         let jsonServicios = await resServicios.json();
-    
+
         // Mapear estructura de datos a lo que espera el frontend
         clientes = (jsonClientes.data || []).map(c => ({
             id: c.ClienteID,
@@ -288,14 +340,14 @@
             telefono: c.Telefono,
             email: c.Email
         }));
-    
+
         servicios = (jsonServicios.data || []).map(s => ({
             id: s.ServicioID,
             nombre: s.NombreServicio,
             descripcion: s.DescripcionServicio,
             precio: parseFloat(s.Precio)
         }));
-    
+
         console.log('Clientes: ', clientes);
         console.log('Servicios: ', servicios);
     }
@@ -311,21 +363,21 @@
             method: 'POST',
             body: JSON.stringify(data)
         })
-        .then(response => {
-            if (!response.ok) {
-                throw new Error(`Error en la solicitud: ${response.status}`);
-            }
-            return response.json()  ;
-        })
-        .then(result => {
-            console.log(result);
-            alert(result.message);
-        })
-        .catch(error => {
-            console.error('Error al registrar el cliente:', error);
-        }); 
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error(`Error en la solicitud: ${response.status}`);
+                }
+                return response.json();
+            })
+            .then(result => {
+                console.log(result);
+                alert(result.message);
+            })
+            .catch(error => {
+                console.error('Error al registrar el cliente:', error);
+            });
     }
-    
+
 
     // Exportarlas al objeto global
     window.guardarCliente = guardarCliente;

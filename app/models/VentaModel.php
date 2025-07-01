@@ -126,7 +126,7 @@ class VentaModel {
         // También quiero listar los tickets de cada venta de cada cliente
         try {
             // Consulta base
-            $sql = "SELECT v.VentaID, c.Nombre AS Cliente, v.Fecha, v.Total, v.EstadoVenta, v.MetodoPago, 
+            $sql = "SELECT v.ClienteID,v.VentaID, c.Nombre AS Cliente, v.Fecha, v.Total, v.EstadoVenta, v.MetodoPago, 
                         s.NombreServicio AS Servicio, t.Cantidad, t.PrecioUnitario, t.Subtotal
                     FROM Ventas v
                     JOIN Clientes c ON v.ClienteID = c.ClienteID
@@ -176,10 +176,11 @@ class VentaModel {
             $data = array_map('addslashes', $data);
             $data = array_map('urldecode', $data);
             //actualizar el estado de la venta  
-            $sql = "UPDATE Ventas SET EstadoVenta = :nuevoEstado WHERE VentaID = :ventaID";
+            $sql = "UPDATE Ventas SET EstadoVenta = :nuevoEstado, RespuestaPagoID = :RespuestaPagoID WHERE VentaID = :ventaID";
             $stmt = $this->conn->prepare($sql);
             $stmt->execute([
                 ':nuevoEstado' => $data['nuevoEstado'],
+                ':RespuestaPagoID' => $data['RespuestaPagoID'] ?? null, // ID de la respuesta del pago
                 ':ventaID' => $data['ventaID']
             ]);
             // Verificar si se actualizó alguna fila    
