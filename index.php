@@ -329,7 +329,6 @@ function handlePostRequest($action, $data)
             break;
     }
 }
-
 // Función para manejar las solicitudes GET
 function handleGetRequest($action, $data)
 {
